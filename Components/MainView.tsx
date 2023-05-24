@@ -19,7 +19,7 @@ const MainView = () => {
 
   return (
     <NavigationContainer ref={navigationRef} >
-      <Stack.Navigator >
+      <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}} >
         <Stack.Screen name="Home" options={{headerTitle:"Good Evening",animation:'fade',headerStyle:{backgroundColor:"#121212"},headerTintColor:'white',headerTitleStyle:{fontSize:20,fontFamily:'GothamBold'}}} >
             {(props)=><Home {...props} setButtonState={setButtonState}/>}
         </Stack.Screen>
@@ -29,7 +29,13 @@ const MainView = () => {
         <Stack.Screen name="Library" options={{headerBackVisible:false,animation:'fade',headerStyle:{backgroundColor:"#121212"},headerTintColor:'white',headerTitle:"Your Library",headerTitleStyle:{fontSize:20,fontFamily:'GothamBold'}}}>
             {(props)=><Library {...props} setButtonState={setButtonState}/>}
         </Stack.Screen>
-        <Stack.Screen name="Player" options={({ navigation,route })=>({animation:'slide_from_bottom',headerStyle:{backgroundColor:route.params.color},headerTintColor:'white',headerTitle:" Player",headerTitleStyle:{fontSize:20,fontFamily:'GothamBold'},headerLeft: (props)=>(<Pressable {...props} onPress={()=>navigation.goBack()}><Image source={downArrow} style={{tintColor:'white',height:25,width:25}}/></Pressable>)})}>
+        <Stack.Screen name="Player" options={({ navigation,route })=>({animation:'slide_from_bottom',headerStyle:{backgroundColor:route.params?.color},headerTintColor:'white',headerTitleStyle:{fontSize:20,fontFamily:'GothamBold'},headerTransparent:true,
+        headerTitle:()=>(<View style={{alignItems:'center',justifyContent:'center'}}>
+          <Text style={{fontWeight:"600",color:'white'}}>{route.params?.text?route.params?.text:route.params?.subText}</Text>
+          <Text style={[route.params?.subText?{display:"flex"}:{display:"none"}]}>{route.params?.subText}</Text>
+          </View>),
+        headerBackImageSource: downArrow,
+        })}>
             {(props)=><Player {...props} setButtonState={setButtonState}/> }
         </Stack.Screen>
       </Stack.Navigator>

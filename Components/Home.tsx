@@ -1,8 +1,7 @@
 import {View,Pressable,Text,Image, ScrollView} from 'react-native'
-import {useCallback,useState} from 'react'
+import {useCallback,useEffect,useState} from 'react'
 import {useFocusEffect} from '@react-navigation/native'
-import ImageColors from 'react-native-image-colors'
-
+import RNImageColors  from 'react-native-image-colors'
 
 const Home = ({navigation,setButtonState}) => {
     useFocusEffect(
@@ -84,18 +83,18 @@ const PressableCard = ({side,imgSrc,text}:{side:string,imgSrc:string,text:string
 
 const HorizontalCards = ({imgSrc,text,subText,artist,first,thisIs,navigation}:{imgSrc:string,text:string,subText:string,artist:boolean,first:boolean,thisIs:boolean,navigation:any}) => {
 
-    const getColors =  async () => {
-        const result = await ImageColors.getColors(imgSrc!, {
-            fallback: '#228B22',
-            cache: true,
-            key: 'unique_key',
-          })
-        return result.platform=="android"?result.vibrant:"#000000"
-    }
+    const useImageColors = async () => {
+        const holder:any = await RNImageColors.getColors(imgSrc, {
+                fallback: '#228B22',
+                cache: true,
+                key: imgSrc,
+              })
+        return holder.dominant
+      }
     return(
         <View style={{marginTop:20,backgroundColor:'transparent'}}>
-            <Pressable onPress={()=>{
-                getColors().then((result)=>{navigation.navigate("Player",{image:imgSrc,color:result})})}}
+            <Pressable 
+            onPress={()=>{useImageColors().then((result)=>{navigation.navigate("Player",{image:imgSrc,color:result,text:text,subText:subText,artist:artist})})}}
             style={[{flex:1,paddingRight:8},first?{paddingLeft:0}:{paddingLeft:8}]}>
                     <View style={{flex:1,backgroundColor:'transparent'}}>
                     <Image source={{uri:imgSrc}} style={[{flex:1,height:150,width:150},artist?{borderRadius:75}:{borderRadius:0}]}/>
